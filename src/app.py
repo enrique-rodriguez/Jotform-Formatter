@@ -141,6 +141,22 @@ class Application(Frame):
         if self.destination == None:
             raise DirectoryNotSpecified()
 
+        excel_creator = self.get_excel_creator()
+
+        for file in self.files:
+            excel_creator.create(file, self.destination)
+
+        self.display_success(
+            f"Archivos creados exitosamente\nSe a creado {len(self.files)} archivo/s"
+        )
+
+    def get_excel_creator(self):
+        """Returns the ExcelCreator instance
+
+        Returns:
+            ExcelCreator: Instance of ExcelCreator
+        """
+
         builder = ExcelCreatorBuilder()
 
         if self.modify_columns.get():
@@ -149,14 +165,7 @@ class Application(Frame):
         if self.add_numbers.get():
             builder.build_add_numbers_task()
 
-        excel_creator = builder.build()
-
-        for file in self.files:
-            excel_creator.create(file, self.destination)
-
-        self.display_success(
-            f"Archivos creados exitosamente\nSe a creado {len(self.files)} archivo/s"
-        )
+        return builder.build()
 
     def choose_files_handler(self):
         """Method that gets executed when the choose files button is pressed."""
