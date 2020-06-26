@@ -33,8 +33,15 @@ python3 src/main.py
 
 Create the executable
 
+##### Windows
+
 ```
 pyinstaller --onefile -w -i logo.ico -n formatter src/main.py
+```
+
+##### Mac
+```
+pyinstaller --onefile -w -i logo.icns -n formatter src/main.py
 ```
 
 Executable will be created under the 'dist' folder
