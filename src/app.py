@@ -192,7 +192,10 @@ class Application(Frame):
         self.total_selected.set(f"{len(self.files)} archivos seleccionados")
 
 
+
         state = NORMAL if (len(self.files) and self.destination) else DISABLED
+
+        state = NORMAL if self.destination else DISABLED
 
         print(files)
         print(self.destination)
