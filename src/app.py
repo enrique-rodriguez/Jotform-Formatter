@@ -1,6 +1,12 @@
 from tkinter import *
 from tkinter.ttk import *
 
+#Para leer pdfs
+import pdfplumber
+import shutil
+
+
+
 from tkinter import messagebox, filedialog
 from tkinter.filedialog import askopenfilenames
 
@@ -78,6 +84,12 @@ class Application(Frame):
             style='W.TButton', state=DISABLED
         )
 
+        self.ver_button = Button(
+             self.master, text="Renombrar PDFS",
+             command=self.pdf_renaming,
+             style='W.TButton', state=DISABLED
+            )
+
         self.arrange_ui()
 
     def arrange_ui(self):
@@ -90,6 +102,7 @@ class Application(Frame):
         self.add_numbers_checkbox.pack()
         self.modify_columns_checkbox.pack()
         self.create_button.pack()
+        self.ver_button.pack()
 
     def dest_button_handler(self):
         """Method that gets executed when the destination button is pressed."""
@@ -178,6 +191,45 @@ class Application(Frame):
         self.files = files
         self.total_selected.set(f"{len(self.files)} archivos seleccionados")
 
+
         state = NORMAL if (len(self.files) and self.destination) else DISABLED
 
+        print(files)
+        print(self.destination)
+
         self.create_button.config(state=state)
+        self.ver_button.config(state=state)
+
+        
+
+    def pdf_renaming(self):
+
+       if len(self.files) == 0:
+            raise NoFileSelected()
+
+       if self.destination == None:
+            raise DirectoryNotSpecified()
+
+       for file in self.files:
+            with pdfplumber.open(file) as pdf:
+                page = pdf.pages[0]
+                text = page.extract_text()
+
+             
+                nombre = text[text.find('\nNombre')+8:text.find('\nApellidos')]
+                apellidos = text[text.find('\nApellidos')+11:text.find('\nCorreo')]
+                fecha = text[text.find(","):text.find('\nGOBIERNO')]
+                fecha = fecha.replace(",","").replace(" ","-").replace("-","",1)
+
+               
+
+                shutil.move(file,self.destination+"/"+fecha+"-"+nombre+" "+apellidos+".pdf")
+
+       self.display_success(
+            f"Archivos han sido renombrados exitosamente\nSe a creado {len(self.files)} archivo/s"
+        )
+
+ 
+
+
+     
