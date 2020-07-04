@@ -212,8 +212,10 @@ class Application(Frame):
 
        if self.destination == None:
             raise DirectoryNotSpecified()
-
+       count = 0
        for file in self.files:
+            count = count+1
+
             with pdfplumber.open(file) as pdf:
                 page = pdf.pages[0]
                 text = page.extract_text()
@@ -226,7 +228,9 @@ class Application(Frame):
 
                
 
-                shutil.move(file,self.destination+"/"+fecha+"-"+nombre+" "+apellidos+".pdf")
+            shutil.move(file,self.destination+"/"+fecha+"-"+nombre+" "+apellidos+".pdf")
+
+            shutil.move(file,self.destination+"/"+str(count)+".pdf")
 
        self.display_success(
             f"Archivos han sido renombrados exitosamente\nSe a creado {len(self.files)} archivo/s"
