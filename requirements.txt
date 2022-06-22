@@ -2,7 +2,7 @@ altgraph==0.17
 et-xmlfile==1.0.1
 jdcal==1.4.1
 macholib==1.14
-numpy==1.19.0
+numpy==1.22.0
 openpyxl==3.0.4
 pandas==1.0.5
 PyInstaller==3.6
